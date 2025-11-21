@@ -54,7 +54,9 @@ if __name__ == "__main__":
 
             if task.name == task_event.SEND_ESP32_DEVICE_TOGGLE:
                 UdpClient.send(
-                    task.ip, message_format.InfraredFormatSender(address="", command="")
+                    # todo: addressとcommandは後で実際の値を入れる
+                    task.ip,
+                    message_format.InfraredFormatSender(address="", command=""),
                 )
             elif task.name == task_event.UPDATE_FIREBASE_DEVICE_TOGGLE:
                 (
@@ -65,5 +67,8 @@ if __name__ == "__main__":
                     .document(ip_to_share_data[task.ip].id)
                     .set({"is_active": ip_to_share_data[task.ip].is_active})
                 )
+            else:
+                print("An unexpected event occurred.")
+
     except Exception as e:
         print(f"エラー: {e}")
