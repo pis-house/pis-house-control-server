@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "[python]": {
+        // PythonファイルにRuffをデフォルトフォーマッタとして指定
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    }
+}

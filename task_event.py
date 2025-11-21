@@ -1,7 +1,6 @@
-
-#タスクイベント名一覧
-SEND_ESP32_DEVICE_TOGGLE = 'send-esp32-device-toggle'
-UPDATE_FIREBASE_DEVICE_TOGGLE = 'update-firebase-device-toggle'
+# タスクイベント名一覧
+SEND_ESP32_DEVICE_TOGGLE = "send-esp32-device-toggle"
+UPDATE_FIREBASE_DEVICE_TOGGLE = "update-firebase-device-toggle"
 
 
 class TaskEvent:
