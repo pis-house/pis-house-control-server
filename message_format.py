@@ -20,7 +20,8 @@ class InfraredFormatSender(IFormatSender):
 
 class IFormatReader(ABC):
     @abstractmethod
-    def from_list(self):
+    @staticmethod
+    def from_list(cls, raw_list: list[str]):
         pass
 
 
@@ -40,6 +41,7 @@ class StatusValueFormatReader(IFormatReader):
     def __init__(self, status_value: int):
         self.status_value = status_value
 
+    @staticmethod
     def from_list(cls, raw_list: list[str]):
         return cls(status_value=int(raw_list[1]))
 
