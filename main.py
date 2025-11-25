@@ -70,7 +70,7 @@ if __name__ == "__main__":
                     .document(AppData.APP_UUID)
                     .collection("devices")
                     .document(ip_to_share_data[task.ip].id)
-                    .set({"is_active": ip_to_share_data[task.ip].is_active})
+                    .update({"is_active": ip_to_share_data[task.ip].is_active})
                 )
             else:
                 print("An unexpected event occurred.")
