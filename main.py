@@ -11,12 +11,18 @@ import queue
 import task_event
 from firebase_receiver import FirebaseReceiver
 import message_format
+from app_data import AppData
 
 if __name__ == "__main__":
     try:
         load_dotenv()
         cred = credentials.Certificate(os.getenv("FIREBASE_ADMIN_SDK_PATH"))
+        app_uuid_text_path = os.getenv("APP_UUID_TEXT_PATH")
         firebase_admin.initialize_app(cred)
+
+        with open(app_uuid_text_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            AppData.APP_UUID = content.strip()
 
         ip_to_share_data: dict[str, ShareData] = {}
         lock = threading.Lock()
@@ -24,10 +30,9 @@ if __name__ == "__main__":
         set_share_data_done = threading.Event()
 
         network_config_info = NetworkConfigInfo()
-        # if(not network_config_info.set_config()):
-        #     raise Exception("ネットワーク情報が取得できませんでした。")
+        if not network_config_info.set_config():
+            raise Exception("ネットワーク情報が取得できませんでした。")
 
-        network_config_info.ip = "172.16.201.37"
         firebase_receiver = FirebaseReceiver(
             event_queue=event_queue,
             lock=lock,
@@ -62,7 +67,7 @@ if __name__ == "__main__":
                 (
                     firestore.client()
                     .collection("setup")
-                    .document("9d5d4409-ec6e-4988-898b-297d72de2f14")
+                    .document(AppData.APP_UUID)
                     .collection("devices")
                     .document(ip_to_share_data[task.ip].id)
                     .set({"is_active": ip_to_share_data[task.ip].is_active})

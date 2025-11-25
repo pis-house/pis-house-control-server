@@ -4,6 +4,7 @@ from firebase_admin import firestore
 import queue
 import task_event
 import threading
+from app_data import AppData
 
 
 class FirebaseReceiver:
@@ -24,7 +25,7 @@ class FirebaseReceiver:
         doc_ref = (
             firestore.client()
             .collection("setup")
-            .document("9d5d4409-ec6e-4988-898b-297d72de2f14")
+            .document(AppData.APP_UUID)
             .collection("devices")
         )
         doc_ref.on_snapshot(self._on_snapshot)
