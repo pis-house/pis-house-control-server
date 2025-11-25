@@ -19,8 +19,8 @@ class InfraredFormatSender(IFormatSender):
 
 
 class IFormatReader(ABC):
+    @classmethod
     @abstractmethod
-    @staticmethod
     def from_list(cls, raw_list: list[str]):
         pass
 
@@ -31,6 +31,7 @@ class RssiFormatReader(IFormatReader):
     def __init__(self, rssi: float):
         self.rssi = rssi
 
+    @classmethod
     def from_list(cls, raw_list: list[str]):
         return cls(rssi=float(raw_list[1]))
 
@@ -41,7 +42,7 @@ class StatusValueFormatReader(IFormatReader):
     def __init__(self, status_value: int):
         self.status_value = status_value
 
-    @staticmethod
+    @classmethod
     def from_list(cls, raw_list: list[str]):
         return cls(status_value=int(raw_list[1]))
 
