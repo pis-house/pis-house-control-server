@@ -1,4 +1,4 @@
-from share_data import ShareData
+from share_data import ShareData, InfraredData
 from threading import Lock
 from firebase_admin import firestore
 import queue
@@ -34,13 +34,34 @@ class FirebaseReceiver:
         if len(self.ip_to_share_data) == 0:
             for doc in doc_snapshot:
                 data = doc.to_dict()
+                infrared_collection = (
+                    firestore.client()
+                    .collection("setup")
+                    .document(AppData.APP_UUID)
+                    .collection("devices")
+                    .document(data["id"])
+                    .collection("infrared")
+                ).get()
+
+                infrared_dict: dict[str, InfraredData] = {}
+                for doc in infrared_collection:
+                    data = doc.to_dict()
+                    infrared_dict[doc.id] = InfraredData(
+                        data["command"], data["address"]
+                    )
                 self.ip_to_share_data[data["ip"]] = ShareData(
                     aircon_temperature=0,
                     id=doc.id,
                     is_active=data["is_active"],
                     light_brightness_percent=0,
                     rssi=0,
+                    infrared=infrared_dict,
                 )
+
+            for data in self.ip_to_share_data:
+                for key in data.infrared:
+                    value = data.infrared[key]
+                    print(key, value.address, value.command)
 
             self.set_share_data_done.set()
             print(

@@ -59,7 +59,6 @@ if __name__ == "__main__":
 
             if task.name == task_event.SEND_ESP32_DEVICE_TOGGLE:
                 UdpClient.send(
-                    # todo: addressとcommandは後で実際の値を入れる
                     target_ip=task.ip,
                     target_port=9000,
                     format_sender=message_format.InfraredFormatSender(

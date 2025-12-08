@@ -1,3 +1,9 @@
+class InfraredData:
+    def __init__(self, address: str, command: str):
+        self.address = address
+        self.command = command
+
+
 class ShareData:
     def __init__(
         self,
@@ -6,6 +12,7 @@ class ShareData:
         is_active: bool,
         light_brightness_percent: int,
         rssi: float,
+        infrared: dict[str, InfraredData],
     ):
         self.id = id
         self.aircon_temperature = aircon_temperature
@@ -13,3 +20,4 @@ class ShareData:
         self.is_active = is_active
         self.light_brightness_percent = light_brightness_percent
         self.rssi = rssi
+        self.infrared = infrared
