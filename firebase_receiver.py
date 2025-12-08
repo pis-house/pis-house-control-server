@@ -60,7 +60,7 @@ class FirebaseReceiver:
                         infrared=infrared_dict,
                     )
                 except:
-                    print(data["id"])
+                    print(doc.id)
 
             for data in self.ip_to_share_data:
                 for key in data.infrared:
