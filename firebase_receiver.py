@@ -33,13 +33,13 @@ class FirebaseReceiver:
     def _on_snapshot(self, doc_snapshot, _changes, _read_time):
         if len(self.ip_to_share_data) == 0:
             for doc in doc_snapshot:
-                data = doc.to_dict()
+                device_data = doc.to_dict()
                 infrared_collection = (
                     firestore.client()
                     .collection("setup")
                     .document(AppData.APP_UUID)
                     .collection("devices")
-                    .document(data["id"])
+                    .document(device_data["id"])
                     .collection("infrared")
                 ).get()
 
@@ -47,16 +47,16 @@ class FirebaseReceiver:
 
                 infrared_dict: dict[str, InfraredData] = {}
                 for doc in infrared_collection:
-                    data = doc.to_dict()
+                    infrared_data = doc.to_dict()
                     infrared_dict[doc.id] = InfraredData(
-                        data["command"], data["address"]
+                        infrared_data["command"], infrared_data["address"]
                     )
 
-                self.ip_to_share_data[data["ip"]] = ShareData(
-                    aircon_temperature=data["aircon_temperature"],
+                self.ip_to_share_data[device_data["ip"]] = ShareData(
+                    aircon_temperature=device_data["aircon_temperature"],
                     id=doc.id,
-                    is_active=data["is_active"],
-                    light_brightness_percent=data["light_brightness_percent"],
+                    is_active=device_data["is_active"],
+                    light_brightness_percent=device_data["light_brightness_percent"],
                     rssi=0,
                     infrared=infrared_dict,
                 )
