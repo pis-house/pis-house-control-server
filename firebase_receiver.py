@@ -43,6 +43,8 @@ class FirebaseReceiver:
                     .collection("infrared")
                 ).get()
 
+                print("読み取り: ", doc.id)
+
                 infrared_dict: dict[str, InfraredData] = {}
                 for doc in infrared_collection:
                     data = doc.to_dict()
@@ -50,17 +52,14 @@ class FirebaseReceiver:
                         data["command"], data["address"]
                     )
 
-                try:
-                    self.ip_to_share_data[data["ip"]] = ShareData(
-                        aircon_temperature=data["aircon_temperature"],
-                        id=doc.id,
-                        is_active=data["is_active"],
-                        light_brightness_percent=data["light_brightness_percent"],
-                        rssi=0,
-                        infrared=infrared_dict,
-                    )
-                except:
-                    print(doc.id)
+                self.ip_to_share_data[data["ip"]] = ShareData(
+                    aircon_temperature=data["aircon_temperature"],
+                    id=doc.id,
+                    is_active=data["is_active"],
+                    light_brightness_percent=data["light_brightness_percent"],
+                    rssi=0,
+                    infrared=infrared_dict,
+                )
 
             for data in self.ip_to_share_data:
                 for key in data.infrared:
