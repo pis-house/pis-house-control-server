@@ -49,14 +49,18 @@ class FirebaseReceiver:
                     infrared_dict[doc.id] = InfraredData(
                         data["command"], data["address"]
                     )
-                self.ip_to_share_data[data["ip"]] = ShareData(
-                    aircon_temperature=0,
-                    id=doc.id,
-                    is_active=data["is_active"],
-                    light_brightness_percent=0,
-                    rssi=0,
-                    infrared=infrared_dict,
-                )
+
+                try:
+                    self.ip_to_share_data[data["ip"]] = ShareData(
+                        aircon_temperature=data["aircon_temperature"],
+                        id=doc.id,
+                        is_active=data["is_active"],
+                        light_brightness_percent=data["light_brightness_percent"],
+                        rssi=0,
+                        infrared=infrared_dict,
+                    )
+                except:
+                    print(data["id"])
 
             for data in self.ip_to_share_data:
                 for key in data.infrared:
