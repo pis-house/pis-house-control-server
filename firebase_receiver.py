@@ -59,20 +59,6 @@ class FirebaseReceiver:
                     infrared=infrared_dict,
                 )
 
-            for share_data in self.ip_to_share_data.values():
-                infrared_dict = share_data.infrared
-                for key, infrared_data_obj in infrared_dict.items():
-                    print(
-                        f"Key: {key}, "
-                        f"Address: {infrared_data_obj.address}, "
-                        f"Command: {infrared_data_obj.command}"
-                    )
-
-                    self.set_share_data_done.set()
-                    print(
-                        f"IP addresses from initial data {list(self.ip_to_share_data.keys())}"
-                    )
-
         for doc in doc_snapshot:
             device = doc.to_dict()
             share_data = self.ip_to_share_data.get(device["ip"])
