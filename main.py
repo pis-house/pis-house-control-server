@@ -12,6 +12,8 @@ import task_event
 from firebase_receiver import FirebaseReceiver
 import message_format
 from app_data import AppData
+import infrared_pattern
+import device_type
 
 if __name__ == "__main__":
     try:
@@ -58,11 +60,20 @@ if __name__ == "__main__":
             print(f"Event detected [host: {task.ip}, event_name: {task.name}]")
 
             if task.name == task_event.SEND_ESP32_DEVICE_TOGGLE:
+                target_device = ip_to_share_data[task.ip]
+                infrared = target_device.infrared[
+                    infrared_pattern.LIGHT_ON
+                    if device_type.LIGHT == target_device.device_type
+                    else infrared_pattern.AIRCON_HEAT
+                ]
+
                 UdpClient.send(
                     target_ip=task.ip,
                     target_port=9000,
                     format_sender=message_format.InfraredFormatSender(
-                        address="", command=""
+                        address=infrared.address,
+                        command=infrared.command,
+                        protocol=infrared.protocol,
                     ),
                 )
             elif task.name == task_event.UPDATE_FIREBASE_DEVICE_TOGGLE:

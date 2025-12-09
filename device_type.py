@@ -1,0 +1,2 @@
+AIRCON = "aircon"
+LIGHT = "light"

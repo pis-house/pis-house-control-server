@@ -10,12 +10,13 @@ class IFormatSender(ABC):
 class InfraredFormatSender(IFormatSender):
     TYPE = "infrared"
 
-    def __init__(self, address: str, command: str):
+    def __init__(self, address: str, command: str, protocol: str):
         self.address = address
         self.command = command
+        self.protocol = protocol
 
     def to_string(self) -> str:
-        return f"{self.TYPE},{self.address},{self.command}"
+        return f"{self.TYPE},{self.address},{self.command},{self.protocol}"
 
 
 class IFormatReader(ABC):
