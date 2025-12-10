@@ -6,6 +6,7 @@ class UdpClient:
     @staticmethod
     def send(target_ip: str, target_port: int, format_sender: IFormatSender):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        print("send data to: ", str(target_ip) + ":" + str(target_port))
 
         try:
             sock.sendto(
