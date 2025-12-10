@@ -68,6 +68,12 @@ class UdpServer(threading.Thread):
                                     ip=ip, name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE
                                 )
                             )
+                            self.event_queue.put(
+                                task_event.TaskEvent(
+                                    ip=ip,
+                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                )
+                            )
 
         except socket.timeout:
             pass
