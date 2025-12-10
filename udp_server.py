@@ -60,7 +60,7 @@ class UdpServer(threading.Thread):
 
                         if share_data.is_active != bool(format_reader.status_value):
                             print(
-                                f"Updating ip_to_share_data [key: {ip}, target_value: is_active, old: {share_data.is_active}, new: {format_reader.status_value}]"
+                                f"Updating ip_to_share_data [key: {ip}, target_value: is_active, old: {share_data.is_active}, new: {bool(format_reader.status_value)}]"
                             )
                             share_data.is_active = bool(format_reader.status_value)
                             self.event_queue.put(

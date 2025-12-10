@@ -43,7 +43,7 @@ if __name__ == "__main__":
         )
         firebase_receiver.start()
 
-        # 最初にfirebaseから値をセット
+        # 最初にfirebaseから値がセットされるまで待機
         set_share_data_done.wait()
 
         upd_server = UdpServer(
