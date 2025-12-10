@@ -29,6 +29,8 @@ class UdpServer(threading.Thread):
 
     def run(self):
         print("Started UdpServer monitoring")
+        print("ip: ", self.ip)
+        print("port: ", self.port)
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_socket.bind((self.ip, self.port))
         try:
