@@ -68,6 +68,7 @@ class FirebaseReceiver:
             device = doc.to_dict()
             share_data = self.ip_to_share_data.get(device["ip"])
             print(f"Received data [host: firebase, is_active: {device['is_active']}]")
+            print("検知しました")
             if share_data is not None:
                 if share_data.is_active != device["is_active"]:
                     with self.lock:
