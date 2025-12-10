@@ -61,6 +61,7 @@ class FirebaseReceiver:
                     rssi=0,
                     infrared=infrared_dict,
                 )
+            self.set_share_data_done.set()
 
         for doc in doc_snapshot:
             device = doc.to_dict()
