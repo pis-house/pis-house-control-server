@@ -61,11 +61,19 @@ if __name__ == "__main__":
 
             if task.name == task_event.SEND_ESP32_DEVICE_TOGGLE:
                 target_device = ip_to_share_data[task.ip]
-                infrared = target_device.infrared[
+                infrared_on = target_device.infrared[
                     infrared_pattern.LIGHT_ON
                     if device_type.LIGHT == target_device.device_type
                     else infrared_pattern.AIRCON_HEAT
                 ]
+
+                infrared_off = target_device.infrared[
+                    infrared_pattern.LIGHT_OFF
+                    if device_type.LIGHT == target_device.device_type
+                    else infrared_pattern.AIRCON_STOP
+                ]
+
+                infrared = infrared_on if target_device.is_active else infrared_off
 
                 UdpClient.send(
                     target_ip=task.ip,
