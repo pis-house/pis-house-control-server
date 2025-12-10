@@ -35,6 +35,10 @@ if __name__ == "__main__":
         if not network_config_info.set_config():
             raise Exception("ネットワーク情報が取得できませんでした。")
 
+        print("hostIp: ", network_config_info.ip)
+        print("gateway: ", network_config_info.gateway)
+        print("subnet: ", network_config_info.subnet)
+
         firebase_receiver = FirebaseReceiver(
             event_queue=event_queue,
             lock=lock,
