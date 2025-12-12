@@ -47,9 +47,9 @@ class FirebaseReceiver:
                 for infrared_doc in infrared_collection:
                     infrared_data = infrared_doc.to_dict()
                     infrared_dict[infrared_doc.id] = InfraredData(
-                        infrared_data["command"],
-                        infrared_data["address"],
-                        infrared_data["protocol"],
+                        address=infrared_data["address"],
+                        command=infrared_data["command"],
+                        protocol=infrared_data["protocol"],
                     )
 
                 self.ip_to_share_data[device_data["ip"]] = ShareData(
