@@ -49,6 +49,7 @@ class FirebaseReceiver:
                     infrared_dict[infrared_doc.id] = InfraredData(
                         address=infrared_data["address"],
                         command=infrared_data["command"],
+                        custom_process=infrared_data["custom_process"],
                         protocol=infrared_data["protocol"],
                     )
 

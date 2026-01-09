@@ -1,7 +1,8 @@
 class InfraredData:
-    def __init__(self, address: str, command: str, protocol: str):
+    def __init__(self, address: str, command: str, custom_process: str, protocol: str):
         self.address = address
         self.command = command
+        self.custom_process = custom_process
         self.protocol = protocol
 
 
