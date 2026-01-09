@@ -41,12 +41,12 @@ class RssiFormatReader(IFormatReader):
 class BlePresenceFormatReader(IFormatReader):
     TYPE = "ble-presence"
 
-    def __init__(self, ble_presence: int):
+    def __init__(self, ble_presence: bool):
         self.ble_presence = ble_presence
 
     @classmethod
     def from_list(cls, raw_list: list[str]):
-        return cls(ble_presence=int(raw_list[1]))
+        return cls(ble_presence=bool(int(raw_list[1])))
 
 
 def parse_format_reader(message: str) -> IFormatReader:

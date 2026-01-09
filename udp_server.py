@@ -79,15 +79,11 @@ class UdpServer(threading.Thread):
                         )
                         share_data = self.ip_to_share_data.get(ip)
 
-                        if share_data.is_ble_presence != bool(
-                            format_reader.ble_presence
-                        ):
+                        if share_data.is_ble_presence != format_reader.ble_presence:
                             print(
-                                f"Updating ip_to_share_data [key: {ip}, target_value: is_ble_presence, old: {share_data.is_ble_presence}, new: {bool(format_reader.ble_presence)}]"
+                                f"Updating ip_to_share_data [key: {ip}, target_value: is_ble_presence, old: {share_data.is_ble_presence}, new: {format_reader.ble_presence}]"
                             )
-                            share_data.is_ble_presence = bool(
-                                format_reader.ble_presence
-                            )
+                            share_data.is_ble_presence = format_reader.ble_presence
 
         except socket.timeout:
             pass
