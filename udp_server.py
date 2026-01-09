@@ -57,19 +57,20 @@ class UdpServer(threading.Thread):
 
                         if new_is_active != share_data.is_active:
                             share_data.is_active = new_is_active
+
                             self.event_queue.put(
                                 task_event.TaskEvent(
                                     ip=ip,
-                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                    name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE,
                                 )
                             )
 
                             # 一回だけの送信だと赤外線通信が安定せずつかないことがあるため
-                            for _ in 10:
+                            for _ in range(10):
                                 self.event_queue.put(
                                     task_event.TaskEvent(
                                         ip=ip,
-                                        name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE,
+                                        name=task_event.SEND_ESP32_DEVICE_TOGGLE,
                                     )
                                 )
 
