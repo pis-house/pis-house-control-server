@@ -54,5 +54,5 @@ def parse_format_reader(message: str) -> IFormatReader:
     if message_list[0] == "rssi":
         return RssiFormatReader.from_list(message_list)
 
-    if message_list[0] == "status-value":
+    if message_list[0] == "ble-presence":
         return BlePresenceFormatReader.from_list(message_list)
