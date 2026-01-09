@@ -105,7 +105,9 @@ if __name__ == "__main__":
             is_multiple_ble_presence = any(
                 item.is_ble_presence for item in ip_to_share_data.values()
             )
+            print(is_multiple_ble_presence)
             if is_multiple_ble_presence != is_latest_multiple_ble_presence:
+                print("処理発火")
                 is_latest_multiple_ble_presence = is_multiple_ble_presence
 
                 id = str(ulid.new())
