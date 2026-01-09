@@ -82,6 +82,7 @@ if __name__ == "__main__":
                         address=infrared.address,
                         command=infrared.command,
                         protocol=infrared.protocol,
+                        custom_process=infrared.custom_process,
                     ),
                 )
             elif task.name == task_event.UPDATE_FIREBASE_DEVICE_TOGGLE:

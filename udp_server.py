@@ -51,6 +51,14 @@ class UdpServer(threading.Thread):
                             )
                             share_data.rssi = format_reader.rssi
 
+                        if format_reader.rssi >= 100:
+                            self.event_queue.put(
+                                task_event.TaskEvent(
+                                    ip=ip,
+                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                )
+                            )
+
                 if isinstance(format_reader, StatusValueFormatReader):
                     with self.lock:
                         print(
