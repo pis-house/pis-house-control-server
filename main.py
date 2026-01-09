@@ -113,19 +113,15 @@ if __name__ == "__main__":
                     ).collection("notifications").document(id).set(
                         {
                             "id": id,
-                            "title": "麻生が帰宅しました",
+                            "title": "麻生が帰宅しました"
+                            if is_multiple_ble_presence
+                            else "麻生が外出しました",
                             "type": "going_home"
                             if is_multiple_ble_presence
                             else "going_out",
                             "created_at": datetime.datetime.now().isoformat(),
                         }
                     )
-
-                    print(
-                        f"DEBUG: Path is 'tenants/{AppData.APP_UUID}/notifications/{id}'"
-                    )
-
-                    print("書き込み完了")
             else:
                 print("An unexpected event occurred.")
 
