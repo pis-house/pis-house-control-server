@@ -108,6 +108,7 @@ if __name__ == "__main__":
                     is_latest_multiple_ble_presence = is_multiple_ble_presence
 
                     id = str(ulid.new())
+                    print(id)
                     firestore.client().collection("tenants").document(
                         AppData.APP_UUID
                     ).collection("notifications").document(id).set(
