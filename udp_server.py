@@ -1,6 +1,6 @@
 import socket
 import message_format
-from message_format import RssiFormatReader, StatusValueFormatReader
+from message_format import RssiFormatReader, BlePresenceFormatReader
 import threading
 from share_data import ShareData
 from threading import Lock
@@ -72,29 +72,42 @@ class UdpServer(threading.Thread):
                                 )
                             )
 
-                if isinstance(format_reader, StatusValueFormatReader):
+                if isinstance(format_reader, BlePresenceFormatReader):
                     with self.lock:
                         print(
-                            f"Received data [host: {ip}, status_value: {format_reader.status_value}]"
+                            f"Received data [host: {ip}, ble_presence: {format_reader.ble_presence}]"
                         )
                         share_data = self.ip_to_share_data.get(ip)
 
-                        if share_data.is_active != bool(format_reader.status_value):
+                        if share_data.is_ble_presence != bool(
+                            format_reader.ble_presence
+                        ):
                             print(
-                                f"Updating ip_to_share_data [key: {ip}, target_value: is_active, old: {share_data.is_active}, new: {bool(format_reader.status_value)}]"
+                                f"Updating ip_to_share_data [key: {ip}, target_value: is_ble_presence, old: {share_data.is_ble_presence}, new: {bool(format_reader.ble_presence)}]"
                             )
-                            share_data.is_active = bool(format_reader.status_value)
+                            share_data.is_ble_presence = bool(
+                                format_reader.ble_presence
+                            )
                             self.event_queue.put(
                                 task_event.TaskEvent(
                                     ip=ip, name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE
                                 )
                             )
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip,
-                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+
+                            if share_data.is_ble_presence:
+                                self.event_queue.put(
+                                    task_event.TaskEvent(
+                                        ip=ip,
+                                        name=task_event.CREATE_FIREBASE_GOING_HOME_NOTICE,
+                                    )
                                 )
-                            )
+                            else:
+                                self.event_queue.put(
+                                    task_event.TaskEvent(
+                                        ip=ip,
+                                        name=task_event.CREATE_FIREBASE_GOING_OUT_NOTICE,
+                                    )
+                                )
 
         except socket.timeout:
             pass

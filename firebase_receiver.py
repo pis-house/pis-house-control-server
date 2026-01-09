@@ -59,7 +59,7 @@ class FirebaseReceiver:
                     id=device_doc.id,
                     is_active=device_data["is_active"],
                     light_brightness_percent=device_data["light_brightness_percent"],
-                    rssi=0,
+                    rssi=99999,
                     infrared=infrared_dict,
                 )
 

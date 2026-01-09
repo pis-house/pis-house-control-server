@@ -16,6 +16,7 @@ class ShareData:
         light_brightness_percent: int,
         rssi: float,
         infrared: dict[str, InfraredData],
+        is_ble_presence,
     ):
         self.id = id
         self.aircon_temperature = aircon_temperature
@@ -25,3 +26,4 @@ class ShareData:
         self.light_brightness_percent = light_brightness_percent
         self.rssi = rssi
         self.infrared = infrared
+        self.is_ble_presence = is_ble_presence

@@ -38,15 +38,15 @@ class RssiFormatReader(IFormatReader):
         return cls(rssi=float(raw_list[1]))
 
 
-class StatusValueFormatReader(IFormatReader):
-    TYPE = "status-value"
+class BlePresenceFormatReader(IFormatReader):
+    TYPE = "ble-presence"
 
-    def __init__(self, status_value: int):
-        self.status_value = status_value
+    def __init__(self, ble_presence: int):
+        self.ble_presence = ble_presence
 
     @classmethod
     def from_list(cls, raw_list: list[str]):
-        return cls(status_value=int(raw_list[1]))
+        return cls(ble_presence=int(raw_list[1]))
 
 
 def parse_format_reader(message: str) -> IFormatReader:
@@ -55,4 +55,4 @@ def parse_format_reader(message: str) -> IFormatReader:
         return RssiFormatReader.from_list(message_list)
 
     if message_list[0] == "status-value":
-        return StatusValueFormatReader.from_list(message_list)
+        return BlePresenceFormatReader.from_list(message_list)

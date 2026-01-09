@@ -14,6 +14,8 @@ import message_format
 from app_data import AppData
 import infrared_pattern
 import device_type
+import ulid
+import datetime
 
 if __name__ == "__main__":
     try:
@@ -93,6 +95,31 @@ if __name__ == "__main__":
                     .collection("devices")
                     .document(ip_to_share_data[task.ip].id)
                     .update({"is_active": ip_to_share_data[task.ip].is_active})
+                )
+            elif task.name == task_event.CREATE_FIREBASE_GOING_HOME_NOTICE:
+                id = str(ulid.new())
+                firestore.client().collection("tenants").document(
+                    AppData.APP_UUID
+                ).collection("notifications").document(id).set(
+                    {
+                        "id": id,
+                        "title": "麻生が帰宅しました",
+                        "type": "going_home",
+                        "created_at": datetime.datetime.now().isoformat(),
+                    }
+                )
+
+            elif task.name == task_event.CREATE_FIREBASE_GOING_OUT_NOTICE:
+                id = str(ulid.new())
+                firestore.client().collection("tenants").document(
+                    AppData.APP_UUID
+                ).collection("notifications").document(id).set(
+                    {
+                        "id": id,
+                        "title": "麻生が外出しました",
+                        "type": "going_out",
+                        "created_at": datetime.datetime.now().isoformat(),
+                    }
                 )
             else:
                 print("An unexpected event occurred.")
