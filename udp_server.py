@@ -65,14 +65,12 @@ class UdpServer(threading.Thread):
                                 )
                             )
 
-                            # 一回だけの送信だと赤外線通信が安定せずつかないことがあるため
-                            for _ in range(10):
-                                self.event_queue.put(
-                                    task_event.TaskEvent(
-                                        ip=ip,
-                                        name=task_event.SEND_ESP32_DEVICE_TOGGLE,
-                                    )
+                            self.event_queue.put(
+                                task_event.TaskEvent(
+                                    ip=ip,
+                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
                                 )
+                            )
 
                 if isinstance(format_reader, StatusValueFormatReader):
                     with self.lock:
