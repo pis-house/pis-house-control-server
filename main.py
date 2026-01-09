@@ -104,8 +104,6 @@ if __name__ == "__main__":
                     item.is_ble_presence for item in ip_to_share_data.values()
                 )
 
-                print("ああああああああああああああああ")
-                print(is_multiple_ble_presence, is_latest_multiple_ble_presence)
                 if is_multiple_ble_presence != is_latest_multiple_ble_presence:
                     is_latest_multiple_ble_presence = is_multiple_ble_presence
 
@@ -122,6 +120,8 @@ if __name__ == "__main__":
                             "created_at": datetime.datetime.now().isoformat(),
                         }
                     )
+
+                    print("書き込み完了")
             else:
                 print("An unexpected event occurred.")
 
