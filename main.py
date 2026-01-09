@@ -57,6 +57,9 @@ if __name__ == "__main__":
         )
         upd_server.start()
 
+        # 複数のESP32でビーコンが検知されているかのステータスを保持する
+        is_latest_multiple_ble_presence = True
+
         while True:
             task = event_queue.get()
             print(f"Event detected [host: {task.ip}, event_name: {task.name}]")
@@ -96,7 +99,15 @@ if __name__ == "__main__":
                     .document(ip_to_share_data[task.ip].id)
                     .update({"is_active": ip_to_share_data[task.ip].is_active})
                 )
-            elif task.name == task_event.CREATE_FIREBASE_GOING_HOME_NOTICE:
+            else:
+                print("An unexpected event occurred.")
+
+            is_multiple_ble_presence = any(
+                item.is_ble_presence for item in ip_to_share_data.values()
+            )
+            if is_multiple_ble_presence != is_latest_multiple_ble_presence:
+                is_latest_multiple_ble_presence = is_multiple_ble_presence
+
                 id = str(ulid.new())
                 firestore.client().collection("tenants").document(
                     AppData.APP_UUID
@@ -104,25 +115,12 @@ if __name__ == "__main__":
                     {
                         "id": id,
                         "title": "麻生が帰宅しました",
-                        "type": "going_home",
+                        "type": "going_home"
+                        if is_multiple_ble_presence
+                        else "going_out",
                         "created_at": datetime.datetime.now().isoformat(),
                     }
                 )
-
-            elif task.name == task_event.CREATE_FIREBASE_GOING_OUT_NOTICE:
-                id = str(ulid.new())
-                firestore.client().collection("tenants").document(
-                    AppData.APP_UUID
-                ).collection("notifications").document(id).set(
-                    {
-                        "id": id,
-                        "title": "麻生が外出しました",
-                        "type": "going_out",
-                        "created_at": datetime.datetime.now().isoformat(),
-                    }
-                )
-            else:
-                print("An unexpected event occurred.")
 
     except Exception as e:
         print(f"エラー: {e}")

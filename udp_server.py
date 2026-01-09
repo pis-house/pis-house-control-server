@@ -88,26 +88,6 @@ class UdpServer(threading.Thread):
                             share_data.is_ble_presence = bool(
                                 format_reader.ble_presence
                             )
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip, name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE
-                                )
-                            )
-
-                            if share_data.is_ble_presence:
-                                self.event_queue.put(
-                                    task_event.TaskEvent(
-                                        ip=ip,
-                                        name=task_event.CREATE_FIREBASE_GOING_HOME_NOTICE,
-                                    )
-                                )
-                            else:
-                                self.event_queue.put(
-                                    task_event.TaskEvent(
-                                        ip=ip,
-                                        name=task_event.CREATE_FIREBASE_GOING_OUT_NOTICE,
-                                    )
-                                )
 
         except socket.timeout:
             pass

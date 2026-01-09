@@ -61,6 +61,7 @@ class FirebaseReceiver:
                     light_brightness_percent=device_data["light_brightness_percent"],
                     rssi=99999,
                     infrared=infrared_dict,
+                    is_ble_presence=True,
                 )
 
             self.set_share_data_done.set()
