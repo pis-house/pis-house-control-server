@@ -108,7 +108,6 @@ if __name__ == "__main__":
                     is_latest_multiple_ble_presence = is_multiple_ble_presence
 
                     id = str(ulid.new())
-                    print(id)
                     firestore.client().collection("tenants").document(
                         AppData.APP_UUID
                     ).collection("notifications").document(id).set(
@@ -120,6 +119,10 @@ if __name__ == "__main__":
                             else "going_out",
                             "created_at": datetime.datetime.now().isoformat(),
                         }
+                    )
+
+                    print(
+                        f"DEBUG: Path is 'tenants/{AppData.APP_UUID}/notifications/{id}'"
                     )
 
                     print("書き込み完了")
