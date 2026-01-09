@@ -51,11 +51,21 @@ class UdpServer(threading.Thread):
                             )
                             share_data.rssi = format_reader.rssi
 
-                        if format_reader.rssi >= 100:
+                        new_is_active = False
+                        if format_reader.rssi <= 100:
+                            new_is_active = True
+
+                        if new_is_active != share_data.is_active:
+                            share_data.is_active
                             self.event_queue.put(
                                 task_event.TaskEvent(
                                     ip=ip,
                                     name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                )
+                            )
+                            self.event_queue.put(
+                                task_event.TaskEvent(
+                                    ip=ip, name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE
                                 )
                             )
 
