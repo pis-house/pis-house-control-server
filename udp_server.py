@@ -85,6 +85,13 @@ class UdpServer(threading.Thread):
                             )
                             share_data.is_ble_presence = format_reader.ble_presence
 
+                        self.event_queue.put(
+                            task_event.TaskEvent(
+                                ip=ip,
+                                name=task_event.FIREBASE_NOTICE_JUDLE_AND_CREATE,
+                            )
+                        )
+
         except socket.timeout:
             pass
         except Exception as e:

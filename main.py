@@ -99,30 +99,28 @@ if __name__ == "__main__":
                     .document(ip_to_share_data[task.ip].id)
                     .update({"is_active": ip_to_share_data[task.ip].is_active})
                 )
+            elif task.name == task_event.FIREBASE_NOTICE_JUDLE_AND_CREATE:
+                is_multiple_ble_presence = any(
+                    item.is_ble_presence for item in ip_to_share_data.values()
+                )
+                if is_multiple_ble_presence != is_latest_multiple_ble_presence:
+                    is_latest_multiple_ble_presence = is_multiple_ble_presence
+
+                    id = str(ulid.new())
+                    firestore.client().collection("tenants").document(
+                        AppData.APP_UUID
+                    ).collection("notifications").document(id).set(
+                        {
+                            "id": id,
+                            "title": "麻生が帰宅しました",
+                            "type": "going_home"
+                            if is_multiple_ble_presence
+                            else "going_out",
+                            "created_at": datetime.datetime.now().isoformat(),
+                        }
+                    )
             else:
                 print("An unexpected event occurred.")
-
-            is_multiple_ble_presence = any(
-                item.is_ble_presence for item in ip_to_share_data.values()
-            )
-            print(is_multiple_ble_presence)
-            if is_multiple_ble_presence != is_latest_multiple_ble_presence:
-                print("処理発火")
-                is_latest_multiple_ble_presence = is_multiple_ble_presence
-
-                id = str(ulid.new())
-                firestore.client().collection("tenants").document(
-                    AppData.APP_UUID
-                ).collection("notifications").document(id).set(
-                    {
-                        "id": id,
-                        "title": "麻生が帰宅しました",
-                        "type": "going_home"
-                        if is_multiple_ble_presence
-                        else "going_out",
-                        "created_at": datetime.datetime.now().isoformat(),
-                    }
-                )
 
     except Exception as e:
         print(f"エラー: {e}")
