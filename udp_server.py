@@ -52,7 +52,7 @@ class UdpServer(threading.Thread):
                             share_data.rssi = format_reader.rssi
 
                         new_is_active = False
-                        if format_reader.rssi <= 70:
+                        if format_reader.rssi <= 60:
                             new_is_active = True
 
                         if new_is_active != share_data.is_active:
