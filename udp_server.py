@@ -91,19 +91,6 @@ class UdpServer(threading.Thread):
                                     name=task_event.FIREBASE_NOTICE_JUDLE_AND_CREATE,
                                 )
                             )
-                            share_data.is_active = False
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip,
-                                    name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE,
-                                )
-                            )
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip,
-                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
-                                )
-                            )
 
         except socket.timeout:
             pass
