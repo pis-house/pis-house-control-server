@@ -26,6 +26,7 @@ class UdpServer(threading.Thread):
         self.lock = lock
         self.ip_to_share_data = ip_to_share_data
         self.daemon = True
+        self.rssi_buffer: list[float] = []
 
     def run(self):
         print("Started UdpServer monitoring")
@@ -42,35 +43,41 @@ class UdpServer(threading.Thread):
 
                 if isinstance(format_reader, RssiFormatReader):
                     with self.lock:
-                        print(f"Received data [host: {ip}, rssi: {format_reader.rssi}]")
+                        # print(f"Received data [host: {ip}, rssi: {format_reader.rssi}]")
                         share_data = self.ip_to_share_data.get(ip)
 
                         if share_data.rssi != format_reader.rssi:
-                            print(
-                                f"Updating ip_to_share_data [key: {ip}, target_value: rssi, old: {share_data.rssi}, new: {format_reader.rssi}]"
-                            )
+                            # print(
+                            #     f"Updating ip_to_share_data [key: {ip}, target_value: rssi, old: {share_data.rssi}, new: {format_reader.rssi}]"
+                            # )
                             share_data.rssi = format_reader.rssi
 
-                        new_is_active = False
-                        if format_reader.rssi <= 60:
-                            new_is_active = True
+                        self.rssi_buffer.append(format_reader.rssi)
+                        if len(self.rssi_buffer) == 10:
+                            print(self.rssi_buffer)
+                            sorted_buffer = sorted(self.rssi_buffer)
+                            trimmed_buffer = sorted_buffer[1:-1]
+                            avg_rssi = sum(trimmed_buffer) / len(trimmed_buffer)
+                            self.rssi_buffer = []
+                            new_is_active = False
+                            if avg_rssi <= 60:
+                                new_is_active = True
+                            if new_is_active != share_data.is_active:
+                                share_data.is_active = new_is_active
 
-                        if new_is_active != share_data.is_active:
-                            share_data.is_active = new_is_active
-
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip,
-                                    name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE,
+                                self.event_queue.put(
+                                    task_event.TaskEvent(
+                                        ip=ip,
+                                        name=task_event.UPDATE_FIREBASE_DEVICE_TOGGLE,
+                                    )
                                 )
-                            )
 
-                            self.event_queue.put(
-                                task_event.TaskEvent(
-                                    ip=ip,
-                                    name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                self.event_queue.put(
+                                    task_event.TaskEvent(
+                                        ip=ip,
+                                        name=task_event.SEND_ESP32_DEVICE_TOGGLE,
+                                    )
                                 )
-                            )
 
                 if isinstance(format_reader, BlePresenceFormatReader):
                     with self.lock:
