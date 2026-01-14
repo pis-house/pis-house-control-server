@@ -11,6 +11,7 @@ class ShareData:
         self,
         aircon_temperature: float,
         device_type: str,
+        device_name: str,
         id: str,
         is_active: bool,
         light_brightness_percent: int,
@@ -21,6 +22,7 @@ class ShareData:
         self.id = id
         self.aircon_temperature = aircon_temperature
         self.device_type = device_type
+        self.device_name = device_name
         self.id = id
         self.is_active = is_active
         self.light_brightness_percent = light_brightness_percent

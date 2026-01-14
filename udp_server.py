@@ -54,7 +54,7 @@ class UdpServer(threading.Thread):
 
                         self.rssi_buffer.append(format_reader.rssi)
                         if len(self.rssi_buffer) == 10:
-                            print(self.rssi_buffer)
+                            print(share_data.device_name, self.rssi_buffer)
                             sorted_buffer = sorted(self.rssi_buffer)
                             trimmed_buffer = sorted_buffer[1:-1]
                             avg_rssi = sum(trimmed_buffer) / len(trimmed_buffer)
